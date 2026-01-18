@@ -51,25 +51,23 @@ public:
     
     }
     void put(int key, int value) {
+        if (cache.find(key) != cache.end()) {
+            Node* existingNode = cache[key];
+            delNode(existingNode);
+            cache.erase(key);
+            // Move the accessed node to the front (most recently used)
+            if(cache.size() == limit) {
+               
+                cache.erase(tail->prev->key);
+                delNode(tail->prev);    
+            }
+            Node* newNode = new Node(key, value);
+            addNode(newNode);
+            cache[key] = newNode;
 
-    // If key exists: delete old node
-    if (cache.find(key) != cache.end()) {
-        Node* existingNode = cache[key];
-        delNode(existingNode);
-        cache.erase(key);
+        
+            
+        }
+       
     }
-
-    // If capacity full: remove LRU node (tail->prev)
-    if (cache.size() == limit) {
-        Node* lru = tail->prev;
-        cache.erase(lru->key);
-        delNode(lru);
-    }
-
-    // Add new node at front
-    Node* newNode = new Node(key, value);
-    addNode(newNode);
-    cache[key] = newNode;
-}
-
 };

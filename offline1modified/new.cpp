@@ -1,23 +1,27 @@
+#include<bits\stdc++.h>
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "linkedList.h"
+#include <stdbool.h>
+//#include "linkedList.h"
 
-// typedef struct node
-// {
-//     int element;
-//    struct node *next;
-//     struct node *prev;
-// } node;
+typedef struct node
+{
+    int element;
+   struct node *next;
+    struct node *prev;
+} node;
 
-// typedef struct
-// {
-//     // declare head, tail, cur and other variables you need
-//      struct node *head;
-//     struct node *tail;
-//     struct node *cur;
-//     int size;
+typedef struct
+{
+    // declare head, tail, cur and other variables you need
+     struct node *head;
+    struct node *tail;
+    struct node *cur;
+    int size;
+    bool nextisinsert;
 
-// } linkedList;
+} linkedList;
 
 void init(linkedList *list)
 {
@@ -25,6 +29,7 @@ void init(linkedList *list)
     list->head = NULL;
     list->tail = NULL;
     list->cur = NULL;
+    list->nextisinsert = true;
     list->size = 0;
 }
 
@@ -445,5 +450,55 @@ void reverse(linkedList *list)
 
 
 }
+
+// ----------- Function 11 (A1_A2): reverse_pos(ind1, ind2) -----------
+// safest way: swap node values (not links)
+void reverse_pos(int ind1, int ind2) {
+    while (ind1 < ind2) {
+        node* left = list->head;
+        node* right = list->head;
+
+        for (int i = 0; i < ind1; i++) left = left->next;
+        for (int i = 0; i < ind2; i++) right = right->next;
+
+        int temp = left->element;
+        left->element = right->element;
+        right->element = temp;
+
+        ind1++;
+        ind2--;
+    }
+}
+
+// ----------- Function 11 (B1_B2): surprise_insert(item) -----------
+void surprise_insert(int item, linkedList *list) {
+    if (list->nextisinsert) insert(item, list);
+    else append(item, list);
+
+    list->nextisinsert = !list->nextisinsert;
+}
+
+// ----------- Function 11 (C1_C2): combine() -----------
+void combine(linkedList *list) {
+    // need current, current->next, current->next->next
+    if (list->cur == nullptr || list->cur->next == nullptr || list->cur->next->next == nullptr) {
+        printf("Invalid\n");
+        return;
+    }
+
+    node* a = list->cur;
+    node* b = list->cur->next;
+    node* c = list->cur->next->next;
+
+    a->element = a->element + b->element + c->element;
+
+    a->next = c->next;
+
+    free(b);
+    free(c);
+
+    list->size -= 2;
+}
+
 
 // you can define helper functions you need
