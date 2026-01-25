@@ -180,6 +180,7 @@ public:
             if(!temp)
                 return head;
             temp=temp->next;
+            count++;
         
         }
 

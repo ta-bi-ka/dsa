@@ -20,3 +20,6 @@ vector<int> previoussmallerElements(const vector<int>& nums) {
 
     return result;
 }
+
+/////seee
+

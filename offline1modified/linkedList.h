@@ -56,11 +56,12 @@ void print(linkedList *list)
     node *temp = list->head;
     while (temp)
     {
-        if(temp == list->cur)
+       
+        printf("%d ",temp->element);
+         if(temp == list->cur)
         {
             printf("|");
         }
-        printf("%d ",temp->element);
         temp = temp->next;
     }
     printf(" ]\n");
@@ -478,25 +479,85 @@ void surprise_insert(int item, linkedList *list) {
 }
 
 // ----------- Function 11 (C1_C2): combine() -----------
-void combine(linkedList *list) {
-    // need current, current->next, current->next->next
-    if (list->cur == NULL || list->cur->next == NULL || list->cur->next->next == NULL) {
+void combine(linkedList *list)
+{
+    if (list->cur == NULL || list->cur->next == NULL || list->cur->next->next == NULL)
+    {
         printf("Invalid\n");
         return;
     }
 
-    node* a = list->cur;
-    node* b = list->cur->next;
-    node* c = list->cur->next->next;
+    node *a = list->cur;
+    node *b = a->next;
+    node *c = b->next;
+    node *after = c->next;
 
+    // sum into current node
     a->element = a->element + b->element + c->element;
 
-    a->next = c->next;
+    // link a to after
+    a->next = after;
+    if (after != NULL)
+        after->prev = a;
 
+    // update tail if needed
+    if (after == NULL)
+        list->tail = a;
+
+    // free removed nodes
     free(b);
     free(c);
 
     list->size -= 2;
+}
+
+
+void rotate(int dir, linkedList *list)
+{
+    // if empty or only one element -> no rotation
+    if (list->head == NULL || list->head == list->tail)
+        return;
+
+    if (dir == 0)
+    {
+        // LEFT ROTATE by 1
+        // head node goes to tail
+
+        node *oldHead = list->head;
+        node *newHead = oldHead->next;
+
+        // detach old head
+        newHead->prev = NULL;
+        oldHead->next = NULL;
+
+        // attach old head after tail
+        list->tail->next = oldHead;
+        oldHead->prev = list->tail;
+
+        // update head and tail
+        list->head = newHead;
+        list->tail = oldHead;
+    }
+    else if (dir == 1)
+    {
+        // RIGHT ROTATE by 1
+        // tail node goes to head
+
+        node *oldTail = list->tail;
+        node *newTail = oldTail->prev;
+
+        // detach old tail
+        newTail->next = NULL;
+        oldTail->prev = NULL;
+
+        // attach old tail before head
+        oldTail->next = list->head;
+        list->head->prev = oldTail;
+
+        // update head and tail
+        list->head = oldTail;
+        list->tail = newTail;
+    }
 }
 
 

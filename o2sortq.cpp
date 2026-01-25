@@ -31,10 +31,10 @@ void sortQueue(queue<int> &q) {
 
         // Step 3: rotate remaining (sorted part) elements back
         // (the last i elements are already rotated behind)
-        for (int j = 0; j < i; j++) {
-            q.push(q.front());
-            q.pop();
-        }
+        // for (int j = 0; j < i; j++) {
+        //     q.push(q.front());
+        //     q.pop();
+        // }
     }
 
     // Now stack has elements such that popping gives increasing order

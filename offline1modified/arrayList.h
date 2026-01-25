@@ -86,11 +86,17 @@ void decrease_capacity(arrayList *list)
 void print(arrayList *list)
 {
     // implement list printing
+    printf("[ ");
     for (int i = 0; i < list->size; i++)
     {
+       
         printf("%d ", list->array[i]);
+        if (i == list->cur)
+        {
+            printf("| ");
+        }
     }
-    printf("\n");
+    printf(" ]\n");
 }
 
 void insert(int item, arrayList *list)
