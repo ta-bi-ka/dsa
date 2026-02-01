@@ -17,7 +17,7 @@ public:
 };
 
 static int idx = 0;
-Node *buildBST(vector<int> preorder)
+Node *buildBT(vector<int> preorder)
 {
     idx++;
     if (preorder[idx] == -1)
@@ -26,8 +26,8 @@ Node *buildBST(vector<int> preorder)
     ;
     int val = preorder[idx];
     Node *root = new Node(val);
-    root->left = buildBST(preorder);
-    root->right = buildBST(preorder);
+    root->left = buildBT(preorder);
+    root->right = buildBT(preorder);
     return root;
 }
 
@@ -61,6 +61,7 @@ void levelOrderPrint(Node *root)
 
     queue<Node *> q;
     q.push(root);
+    q.push(NULL); // Level delimiter
 
     while (q.size() > 0)
     {
@@ -163,7 +164,7 @@ int ans = 0;
 
 
 */
-
+///////////////////////////////////////////////////////////////////////////////////////////////
 void topview(Node *root)
 {
     queue<pair<Node *, int>> q;
@@ -185,6 +186,7 @@ void topview(Node *root)
         }
     }
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 void kthlevel(Node *root, int k)
 {
     if (root == NULL)
@@ -243,7 +245,7 @@ Node *buildtreehelper(vector<int> &inorder, vector<int> &preorder, int &preidx, 
     }
     Node *root = new Node(preorder[preidx++]);
 
-    int inIdx = search(inorder, instart, inend, preorder[preidx]);
+    int inIdx = search(inorder, instart, inend, root->data);
 
     root->left = buildtreehelper(inorder, preorder, preidx, instart, inIdx - 1);
     root->right = buildtreehelper(inorder, preorder, preidx, inIdx + 1, inend);
@@ -326,10 +328,68 @@ int widthoftree(Node *root)
     }
     return maxwidth;
 }
+
+// morris
+vector<int> morrisinorder(Node *root)
+{
+    vector<int> inorder;
+    Node *curr = root;
+    while (curr != NULL)
+    {
+        if (curr->left == NULL)
+        {
+            inorder.push_back(curr->data);
+            curr = curr->right;
+        }
+        else
+        {
+            Node *prev = curr->left;
+            while (prev->right != NULL && prev->right != curr)
+            {
+                prev = prev->right;
+                
+            }
+            if (prev->right == NULL)
+            {
+                prev->right = curr;
+                curr = curr->left;
+            }
+            else
+            {
+                prev->right = NULL;
+                inorder.push_back(curr->data);
+                curr = curr->right;
+            }
+        }
+    }
+    return inorder;
+}
+void flatten(Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    if (root->left != NULL)
+    {
+        flatten(root->left);
+        Node *temp = root->right;
+        root->right = root->left;
+        root->left = NULL;
+        Node *t = root->right;
+        while (t->right != NULL)
+        {
+            t = t->right;
+        }
+        t->right = temp;
+    }
+    flatten(root->right);
+}
+
 int main()
 {
     vector<int> preorder = {10, 5, 1, -1, -1, 7, -1, -1, 40, -1, 50, -1, -1};
-    Node *root = buildBST(preorder);
+    Node *root = buildBT(preorder);
     cout << root->data << endl;
     preorderPrint(root);
     inorderPrint(root);
