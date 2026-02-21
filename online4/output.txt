@@ -1,0 +1,14 @@
+Inserted 20 into the heap.
+Inserted 10 into the heap.
+Inserted 15 into the heap.
+Heap: 10 20 15 
+Min Heap property is preserved.
+Min: 10
+Inserted 5 into the heap.
+Heap: 10 5 15 20 
+Extracted Min: 10
+Heap: 5 20 15 
+Heap built from array.
+Heap: 10 20 40 30 25 
+Min Heap property is preserved.
+Sorted: 10 20 25 
